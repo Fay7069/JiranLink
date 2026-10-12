@@ -1,2 +1,0 @@
-# JiranLink
-Test Ezaddin Coding
