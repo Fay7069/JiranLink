@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JiranLink - Sign In / Register</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #11263f;
+      color: #1f2933;
+    }
+    .brand { text-align: center; margin-bottom: 28px; }
+    .brand h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #f9b233, #f08a1c 50%, #d62a1f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .brand p { margin: 6px 0 0; color: #c5d0de; font-size: 1.05rem; }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      margin-bottom: 24px;
+      background: #f4f4f5;
+      border-radius: 14px;
+    }
+    .tab {
+      flex: 1;
+      padding: 11px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #6b7280;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab.active { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    label { display: block; margin: 16px 0 8px; font-weight: 600; font-size: 0.95rem; color: #6b7280; }
+    .optional { font-weight: 400; }
+    input, textarea {
+      width: 100%;
+      padding: 15px 16px;
+      border: 1px solid #e0e7f3;
+      border-radius: 12px;
+      background: #e8f0fe;
+      font: inherit;
+      color: #111;
+    }
+    input:focus, textarea:focus { outline: 2px solid #d62a1f; border-color: transparent; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 46px; }
+    .eye {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 4px;
+      border: 0;
+      background: none;
+      color: #6b7280;
+      cursor: pointer;
+      display: flex;
+    }
+
+    .forgot { display: block; margin: 14px 0 20px; text-align: right; font-size: 0.9rem; color: #d62a1f; text-decoration: none; }
+
+    .primary {
+      width: 100%;
+      margin-top: 8px;
+      padding: 16px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #d62a1f, #f08a1c);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary:hover { filter: brightness(0.95); }
+
+    .error { display: none; margin-top: 6px; color: #b91c1c; font-size: 0.8rem; }
+    .invalid input, .invalid textarea { border-color: #b91c1c; }
+    .invalid .error { display: block; }
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="brand">
+    <h1>JiranLink</h1>
+    <p>Community Connection Platform</p>
+  </header>
+
+  <main class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab active" type="button" role="tab" data-tab="signin">Sign In</button>
+      <button class="tab" type="button" role="tab" data-tab="register">Register</button>
+    </div>
+
+    <!-- Sign In -->
+    <form id="signin-form" class="panel active" data-panel="signin" novalidate>
+      <div class="field">
+        <label for="si-email">Email</label>
+        <input type="email" id="si-email" name="email" autocomplete="email">
+        <div class="error">Please enter a valid email.</div>
+      </div>
+
+      <div class="field">
+        <label for="si-password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="si-password" name="password" autocomplete="current-password">
+          <button type="button" class="eye" aria-label="Show password" data-toggle="si-password">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="error">Please enter your password.</div>
+      </div>
+
+      <a href="#" class="forgot">Forgot password?</a>
+      <button type="submit" class="primary">Sign In</button>
+      <div class="message" id="signin-msg" role="status">Signed in successfully.</div>
+    </form>
+
+    <!-- Register -->
+    <form id="register-form" class="panel" data-panel="register" novalidate>
+      <div class="field">
+        <label for="nama" style="margin-top:0">Nama</label>
+        <input type="text" id="nama" name="nama" autocomplete="name">
+        <div class="error">Please enter your name.</div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email">
+        <div class="error">Please enter a valid email.</div>
+      </div>
+
+      <div class="field">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" autocomplete="street-address"></textarea>
+        <div class="error">Please enter your address.</div>
+      </div>
+
+      <div class="field">
+        <label for="phone">No. (Phone)</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="e.g. 012-3456789">
+        <div class="error">Please enter a valid phone number.</div>
+      </div>
+
+      <div class="field">
+        <label for="skills">Skills <span class="optional">(optional)</span></label>
+        <textarea id="skills" name="skills" placeholder="e.g. plumbing, tutoring, cooking"></textarea>
+      </div>
+
+      <button type="submit" class="primary" style="margin-top:24px">Register</button>
+      <div class="message" id="register-msg" role="status">Registration successful! Thank you.</div>
+    </form>
+  </main>
+
+  <script>
+    // Tabs
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+      panels.forEach(p => p.classList.toggle('active', p.dataset.panel === tab.dataset.tab));
+    }));
+
+    // Show / hide password
+    document.querySelectorAll('[data-toggle]').forEach(btn => btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.toggle);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }));
+
+    const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+    function validate(form, rules) {
+      let valid = true;
+      for (const [name, check] of Object.entries(rules)) {
+        const input = form.elements[name];
+        const ok = check(input.value);
+        input.closest('.field').classList.toggle('invalid', !ok);
+        if (!ok) valid = false;
+      }
+      return valid;
+    }
+
+    const signinForm = document.getElementById('signin-form');
+    signinForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('signin-msg');
+      msg.style.display = 'none';
+      const valid = validate(signinForm, { email: emailOk, password: v => v.length > 0 });
+      if (!valid) return;
+      // TODO: authenticate against the backend once one is decided.
+      console.log('Sign in:', { email: signinForm.elements.email.value });
+      msg.style.display = 'block';
+    });
+
+    const registerForm = document.getElementById('register-form');
+    registerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('register-msg');
+      msg.style.display = 'none';
+      const valid = validate(registerForm, {
+        nama: v => v.trim().length > 0,
+        email: emailOk,
+        address: v => v.trim().length > 0,
+        phone: v => /^\+?[0-9\s-]{7,15}$/.test(v.trim()),
+      });
+      if (!valid) return;
+      // TODO: send to the backend once a storage/API is decided.
+      console.log('Registration data:', Object.fromEntries(new FormData(registerForm)));
+      registerForm.reset();
+      msg.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
